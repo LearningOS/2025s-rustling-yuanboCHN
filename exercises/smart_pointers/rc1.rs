@@ -10,7 +10,7 @@
 //
 // Execute `rustlings hint rc1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+ 
 
 use std::rc::Rc;
 
@@ -59,45 +59,53 @@ fn main() {
     println!("reference count = {}", Rc::strong_count(&sun)); // 6 references
     jupiter.details();
 
-    // TODO
-    let saturn = Planet::Saturn(Rc::new(Sun {}));
+    // 处理 Saturn
+    let saturn = Planet::Saturn(Rc::clone(&sun));  // 使用 Rc::clone，而不是创建一个新的 Sun
     println!("reference count = {}", Rc::strong_count(&sun)); // 7 references
     saturn.details();
 
-    // TODO
-    let uranus = Planet::Uranus(Rc::new(Sun {}));
+    // 处理 Uranus
+    let uranus = Planet::Uranus(Rc::clone(&sun));  // 使用 Rc::clone，而不是创建一个新的 Sun
     println!("reference count = {}", Rc::strong_count(&sun)); // 8 references
     uranus.details();
 
-    // TODO
-    let neptune = Planet::Neptune(Rc::new(Sun {}));
+    // 处理 Neptune
+    let neptune = Planet::Neptune(Rc::clone(&sun));  // 使用 Rc::clone，而不是创建一个新的 Sun
     println!("reference count = {}", Rc::strong_count(&sun)); // 9 references
     neptune.details();
 
     assert_eq!(Rc::strong_count(&sun), 9);
 
+    // 删除 Neptune，引用计数应该减少
     drop(neptune);
     println!("reference count = {}", Rc::strong_count(&sun)); // 8 references
 
+    // 删除 Uranus，引用计数应该减少
     drop(uranus);
     println!("reference count = {}", Rc::strong_count(&sun)); // 7 references
 
+    // 删除 Saturn，引用计数应该减少
     drop(saturn);
     println!("reference count = {}", Rc::strong_count(&sun)); // 6 references
 
+    // 删除 Jupiter，引用计数应该减少
     drop(jupiter);
     println!("reference count = {}", Rc::strong_count(&sun)); // 5 references
 
+    // 删除 Mars，引用计数应该减少
     drop(mars);
     println!("reference count = {}", Rc::strong_count(&sun)); // 4 references
 
-    // TODO
+    // 删除 Earth，引用计数应该减少
+    drop(earth);
     println!("reference count = {}", Rc::strong_count(&sun)); // 3 references
 
-    // TODO
+    // 删除 Venus，引用计数应该减少
+    drop(venus);
     println!("reference count = {}", Rc::strong_count(&sun)); // 2 references
 
-    // TODO
+    // 删除 Mercury，引用计数应该减少
+    drop(mercury);
     println!("reference count = {}", Rc::strong_count(&sun)); // 1 reference
 
     assert_eq!(Rc::strong_count(&sun), 1);
