@@ -2,7 +2,7 @@
 	queue
 	This question requires you to use queues to implement the functionality of the stac
 */
-// I AM NOT DONE
+ 
 
 #[derive(Debug)]
 pub struct Queue<T> {
@@ -52,33 +52,55 @@ impl<T> Default for Queue<T> {
     }
 }
 
-pub struct myStack<T>
-{
-	//TODO
-	q1:Queue<T>,
-	q2:Queue<T>
+pub struct myStack<T> {
+    q1: Queue<T>,
+    q2: Queue<T>,
 }
+
 impl<T> myStack<T> {
     pub fn new() -> Self {
         Self {
-			//TODO
-			q1:Queue::<T>::new(),
-			q2:Queue::<T>::new()
+            q1: Queue::<T>::new(),
+            q2: Queue::<T>::new(),
         }
     }
+
     pub fn push(&mut self, elem: T) {
-        //TODO
+        // 总是将新元素加入非空队列，如果都为空则选择q1
+        if !self.q1.is_empty() {
+            self.q1.enqueue(elem);
+        } else {
+            self.q2.enqueue(elem);
+        }
     }
+
     pub fn pop(&mut self) -> Result<T, &str> {
-        //TODO
-		Err("Stack is empty")
+        if self.is_empty() {
+            return Err("Stack is empty");
+        }
+
+        // 确定哪个队列是非空的
+        let (src, dst) = if !self.q1.is_empty() {
+            (&mut self.q1, &mut self.q2)
+        } else {
+            (&mut self.q2, &mut self.q1)
+        };
+
+        // 将元素从非空队列转移到另一个队列，直到剩下最后一个元素
+        while src.size() > 1 {
+            if let Ok(val) = src.dequeue() {
+                dst.enqueue(val);
+            }
+        }
+
+        // 返回最后一个元素
+        src.dequeue()
     }
+
     pub fn is_empty(&self) -> bool {
-		//TODO
-        true
+        self.q1.is_empty() && self.q2.is_empty()
     }
 }
-
 #[cfg(test)]
 mod tests {
 	use super::*;
